@@ -6,6 +6,7 @@ Yii Framework 2 Change Log
 
 - Enh #20309: Add custom attributes support to style tags (nzwz)
 - Bug #20329: pgsql: Column Schema doesn't recognize PG type cast (arkhamvm)
+- Bug #20239: Fix `yii\data\ActiveDataProvider` to avoid unexpected pagination results with UNION queries (Izumi-kun)
 
 
 2.0.52 February 13, 2025
@@ -36,7 +37,6 @@ Yii Framework 2 Change Log
 - New #20185: Add `BackedEnum` support to `AttributeTypecastBehavior` (briedis)
 - New #20279: Add to the `\yii\web\Request` CSRF validation by custom HTTP header (olegbaturin)
 - New #20332: Added support for the '__class' key in `\yii\di\Instance:eunsure(['__class' => ...])` (LAV45)
-
 
 2.0.51 July 18, 2024
 --------------------

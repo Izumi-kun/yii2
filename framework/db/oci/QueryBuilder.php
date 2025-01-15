@@ -69,9 +69,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
     public function buildOrderByAndLimit($sql, $orderBy, $limit, $offset)
     {
         $orderBy = $this->buildOrderBy($orderBy);
-        if ($orderBy !== '') {
-            $sql .= $this->separator . $orderBy;
-        }
 
         $filters = [];
         if ($this->hasOffset($offset)) {
@@ -81,13 +78,20 @@ class QueryBuilder extends \yii\db\QueryBuilder
             $filters[] = 'rownum <= ' . $limit;
         }
         if (empty($filters)) {
+            if ($orderBy !== '') {
+                $sql .= $this->separator . $orderBy;
+            }
             return $sql;
         }
 
         $filter = implode(' AND ', $filters);
+        $paginationSql = 'SELECT USER_SQL.*, rownum as rowNumId FROM USER_SQL';
+        if ($orderBy !== '') {
+            $paginationSql .= $this->separator . $orderBy;
+        }
         return <<<EOD
 WITH USER_SQL AS ($sql),
-    PAGINATION AS (SELECT USER_SQL.*, rownum as rowNumId FROM USER_SQL)
+    PAGINATION AS ($paginationSql)
 SELECT *
 FROM PAGINATION
 WHERE $filter

@@ -108,6 +108,7 @@ class Query extends Component implements QueryInterface, ExpressionInterface
      *
      * - `query`: either a string or a [[Query]] object representing a query
      * - `all`: boolean, whether it should be `UNION ALL` or `UNION`
+     * - `final`: boolean, whether it should be placed after `ORDER BY`, `LIMIT`, and `OFFSET` statements if it possible
      */
     public $union;
     /**
@@ -1260,7 +1261,7 @@ PATTERN;
      */
     public function union($sql, $all = false)
     {
-        $this->union[] = ['query' => $sql, 'all' => $all];
+        $this->union[] = ['query' => $sql, 'all' => $all, 'final' => $this->orderBy || $this->limit || $this->offset];
         return $this;
     }
 

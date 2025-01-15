@@ -1666,7 +1666,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
     public function testBuildUnion()
     {
         $expectedQuerySql = $this->replaceQuotes(
-            '(SELECT [[id]] FROM [[TotalExample]] [[t1]] WHERE (w > 0) AND (x < 2)) UNION ( SELECT [[id]] FROM [[TotalTotalExample]] [[t2]] WHERE w > 5 ) UNION ALL ( SELECT [[id]] FROM [[TotalTotalExample]] [[t3]] WHERE w = 3 )'
+            'SELECT [[id]] FROM [[TotalExample]] [[t1]] WHERE (w > 0) AND (x < 2) UNION ( SELECT [[id]] FROM [[TotalTotalExample]] [[t2]] WHERE w > 5 ) UNION ALL ( SELECT [[id]] FROM [[TotalTotalExample]] [[t3]] WHERE w = 3 )'
         );
         $query = new Query();
         $secondQuery = new Query();
@@ -1690,7 +1690,7 @@ abstract class QueryBuilderTest extends DatabaseTestCase
     public function testBuildWithQuery()
     {
         $expectedQuerySql = $this->replaceQuotes(
-            'WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS ((SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2) UNION ( SELECT [[id]] FROM [[t3]] WHERE expr = 3 )) SELECT * FROM [[a2]]'
+            'WITH a1 AS (SELECT [[id]] FROM [[t1]] WHERE expr = 1), a2 AS (SELECT [[id]] FROM [[t2]] INNER JOIN [[a1]] ON t2.id = a1.id WHERE expr = 2 UNION ( SELECT [[id]] FROM [[t3]] WHERE expr = 3 )) SELECT * FROM [[a2]]'
         );
         $with1Query = (new Query())
             ->select('id')

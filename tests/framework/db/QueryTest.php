@@ -793,7 +793,7 @@ abstract class QueryTest extends DatabaseTestCase
         $this->assertEquals($having, $newQuery->having);
         $this->assertEquals($params, $newQuery->params);
         $this->assertEquals([$join], $newQuery->join);
-        $this->assertEquals([['query' => $unionQuery, 'all' => false]], $newQuery->union);
+        $this->assertEquals([['query' => $unionQuery, 'all' => false, 'final' => true]], $newQuery->union);
         $this->assertEquals(
             [['query' => $withQuery, 'alias' => $from, 'recursive' => false]],
             $newQuery->withQueries

@@ -498,6 +498,12 @@ class QueryBuilder extends \yii\db\QueryBuilder
         ];
 
         $sql = implode($this->separator, array_filter($clauses));
+
+        $union = $this->buildUnion($query->union, $params);
+        if ($union !== '') {
+            $sql = "$sql{$this->separator}$union";
+        }
+
         $sql = $this->buildOrderByAndLimit($sql, $query->orderBy, $query->limit, $query->offset);
 
         if (!empty($query->orderBy)) {
@@ -513,11 +519,6 @@ class QueryBuilder extends \yii\db\QueryBuilder
                     $this->buildExpression($expression, $params);
                 }
             }
-        }
-
-        $union = $this->buildUnion($query->union, $params);
-        if ($union !== '') {
-            $sql = "$sql{$this->separator}$union";
         }
 
         $with = $this->buildWithQueries($query->withQueries, $params);

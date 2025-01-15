@@ -238,6 +238,19 @@ class QueryBuilder extends \yii\base\BaseObject
         ];
 
         $sql = implode($this->separator, array_filter($clauses));
+
+        $unions = ['main' => [], 'final' => []];
+        if (!empty($query->union)) {
+            foreach ($query->union as $union) {
+                $unions[$union['final'] ? 'final' : 'main'][] = $union;
+            }
+        }
+
+        $mainUnion = $this->buildUnion($unions['main'], $params);
+        if ($mainUnion !== '') {
+            $sql = "$sql{$this->separator}$mainUnion";
+        }
+
         $sql = $this->buildOrderByAndLimit($sql, $query->orderBy, $query->limit, $query->offset);
 
         if (!empty($query->orderBy)) {
@@ -255,9 +268,9 @@ class QueryBuilder extends \yii\base\BaseObject
             }
         }
 
-        $union = $this->buildUnion($query->union, $params);
-        if ($union !== '') {
-            $sql = "($sql){$this->separator}$union";
+        $finalUnion = $this->buildUnion($unions['final'], $params);
+        if ($finalUnion !== '') {
+            $sql = "($sql){$this->separator}$finalUnion";
         }
 
         $with = $this->buildWithQueries($query->withQueries, $params);
